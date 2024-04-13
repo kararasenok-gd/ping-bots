@@ -1,0 +1,19 @@
+import discord
+from discord.ext import commands
+import asyncio
+import random
+
+pchannels = {{channels}}
+
+client = commands.Bot(command_prefix="cool prefix", intents=discord.Intents.all())
+@client.event
+async def on_ready():
+    print(f"Bot started! User: {client.user}")
+    await client.change_presence(status = discord.Status.online) # DON'T CHANGE STATUS!!!!
+    while True:
+        botc = random.choice(pchannels)
+        channel_bot = await client.fetch_channel(botc)
+        await channel_bot.send("@everyone")
+        await asyncio.sleep(2)
+
+client.run("{{token}}")

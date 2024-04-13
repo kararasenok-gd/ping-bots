@@ -1,0 +1,34 @@
+import discord
+from discord.ext import commands, tasks
+client = commands.Bot(command_prefix="{{prefix}}", intents = discord.Intents.all())
+
+GUILD_ID = {{gid}}
+
+@client.event
+async def on_ready():
+    print(f"Logged in as {client.user}")
+    await client.change_presence(activity=discord.Game(name="Ping bots!"), status=discord.Status.idle)
+    update_status.start()
+
+@tasks.loop(seconds=15)
+async def update_status():
+    onlinelist = ""
+    offlinelist = ""
+
+    for pbot in client.get_guild(GUILD_ID).members:
+        if pbot.id in {{ids}}:
+            if str(pbot.status) == "online":
+                onlinelist += f"{pbot.mention}\n"
+            else:
+                offlinelist += f"{pbot.mention}\n"
+
+    if onlinelist == "":
+        onlinelist = "*Empty/Пусто*"
+    if offlinelist == "":
+        offlinelist = "*Empty/Пусто*"
+
+    channel = await client.fetch_channel({{cid}})
+    message = await channel.fetch_message({{mid}})
+    await message.edit(embed=discord.Embed(title="PING!!!!! Bots status", description=f"**🟢 Online/Онлайн**\n{onlinelist}\n\n**⚪ Offline/Оффлайн**\n{offlinelist}", color=0xffffff, url="https://github.com/kararasenok-gd/ping-bots"))
+
+client.run("{{token}}")
