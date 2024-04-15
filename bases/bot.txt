@@ -13,7 +13,7 @@ async def on_ready():
     while True:
         botc = random.choice(pchannels)
         channel_bot = await client.fetch_channel(botc)
-        await channel_bot.send("@everyone")
+        await channel_bot.send(random.choice({{texts}}))
         await asyncio.sleep(2)
 
 client.run("{{token}}")
